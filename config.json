@@ -3,7 +3,8 @@
     "vehicle":{
         "size":["small", "medium", "large"],
         "direction": ["up","left","right"]
-    }
+    },
+    "rng_seed" :8
 }
 
 

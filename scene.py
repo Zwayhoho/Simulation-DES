@@ -6,15 +6,15 @@ import heapq
 import sys
 
 class Scene:
-    dirpath = os.path.dirname(os.path.realpath(__file__))
-    def __init__(self,n,t):
+    def __init__(self,n,t,rng_seed):
         self.N = n
         self.T = t
+        self.rng_seed = rng_seed
 
     def vehicle_generate(self,time_stamp, car_type, car_direction, which_lane, ID):
         print('generating vehicles ... in the scene')
         numberOfCar = len(time_stamp)
-        global_q_list = [];
+        global_q_list = []
         # create 6 empty list for each lane
         for i in range(6):
             global_q_list.append([])
@@ -33,7 +33,7 @@ class Scene:
         for i in range(6):  # heapify each lane
             heapq.heapify(global_q_list[i])
 
-        return global_q_list;
+        return global_q_list
 
     def pedestrain_generate(self):
         print('generating pedestrains ... in the scene')
@@ -41,6 +41,7 @@ class Scene:
     def poisson_generate_timestamps(self):
         lamda = float(self.N)/float(self.T)/60.0/60.0 #per second
         Time = int(self.T*60.0*60.0) #total seond
+        np.random.seed(self.rng_seed)
         poisson = np.random.poisson(lamda,Time)
         time_stamps = []
         time_stamp = 0.0
@@ -48,7 +49,7 @@ class Scene:
             if p != 0:
                 event_time = np.random.uniform(0,1.0,p)# per second, unit interval
                 for t_s in event_time:
-                    time_stamp=time_stamp+t_s;
+                    time_stamp=time_stamp+t_s
                     time_stamps.append(time_stamp)
             else:
                 time_stamp = time_stamp+1.0
